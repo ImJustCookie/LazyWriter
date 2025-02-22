@@ -1,2 +1,2 @@
 # LazyWriter
-A app for simulating human writing in a document
+An app for simulating human writing in a document
