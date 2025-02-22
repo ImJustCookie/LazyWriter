@@ -9,26 +9,16 @@
 using namespace std;
 
 
-int micro_sec_random(){
+int random_between(int min, int max){
     random_device rd;
 
     mt19937 gen(rd());
 
-    uniform_int_distribution<> dis(50'000, 300'000);
+    uniform_int_distribution<> dis(min, max);
 
     return dis(gen);
 
 }
-
-void ecrire_betement(string texte){
-    for (auto c : texte){
-        cout << c;
-        cout.flush();
-        usleep(micro_sec_random());
-    }
-    cout << endl;
-}
-
 
 vector<string> splitBySpace(const string& input) {
 
@@ -45,20 +35,42 @@ vector<string> splitBySpace(const string& input) {
 
 }
 
+void potentialSmallBreakTime(int chance){
+    if (random_between(0,chance)==0){
+        sleep(random_between(1,6));
+    }
+}
+
+void ecrire_mot(string word){
+    int rand_speed = random_between(100'000,200'000);
+    for (auto c : word){
+        potentialSmallBreakTime(80);
+        cout << c;
+        cout.flush();
+        usleep(rand_speed);
+    }
+    cout << ' ';
+    cout.flush();
+}
+
+
+void ecrire_betement(string texte){
+    for (auto c : texte){
+        cout << c;
+        cout.flush();
+        usleep(random_between(100'000,200'000));
+    }
+    cout << endl;
+}
+
 void ecrire_moins_betement(string texte){
     stringstream wordStream(texte);  
     string word;
     vector<string> listOfWords = splitBySpace(texte);
 
     for (auto word : listOfWords){
-        int rand_speed = micro_sec_random();
-        for (auto c : word){
-            cout << c;
-            cout.flush();
-            usleep(rand_speed);
-        }
-        cout << ' ';
-        cout.flush();
+        potentialSmallBreakTime(30);
+        ecrire_mot(word);
     }
     cout << endl;
 
@@ -68,7 +80,7 @@ void ecrire_moins_betement(string texte){
 
 
 int main() {
-    //ecrire_betement(toto);
+    //ecrire_betement(lorem);
     ecrire_moins_betement(lorem);
     return 0;
 }
