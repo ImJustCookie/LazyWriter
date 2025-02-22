@@ -9,7 +9,7 @@
 using namespace std;
 
 
-int random_between(int min, int max){
+int randomBetween(int min, int max){
     random_device rd;
 
     mt19937 gen(rd());
@@ -36,13 +36,16 @@ vector<string> splitBySpace(const string& input) {
 }
 
 void potentialSmallBreakTime(int chance, int min, int max){
-    if (random_between(0,chance)==0){
-        usleep(random_between(min,max));
+    if (randomBetween(0,chance)==0){
+        usleep(randomBetween(min,max));
     }
 }
 
-void ecrire_mot(string word){
-    int rand_speed = random_between(100'000,200'000);
+
+
+
+void ecrireMot(string word){
+    int rand_speed = randomBetween(100'000,200'000);
     for (auto c : word){
         potentialSmallBreakTime(80, 0, 6'000'000);
         cout << c;
@@ -54,23 +57,23 @@ void ecrire_mot(string word){
 }
 
 
-void ecrire_betement(string texte){
+void ecrireBetement(string texte){
     for (auto c : texte){
         cout << c;
         cout.flush();
-        usleep(random_between(100'000,200'000));
+        usleep(randomBetween(100'000,200'000));
     }
     cout << endl;
 }
 
-void ecrire_moins_betement(string texte){
+void ecrireMoinsBetement(string texte){
     stringstream wordStream(texte);  
     string word;
     vector<string> listOfWords = splitBySpace(texte);
 
     for (auto word : listOfWords){
         potentialSmallBreakTime(30, 0, 4'000'000);
-        ecrire_mot(word);
+        ecrireMot(word);
     }
     cout << endl;
 
@@ -81,6 +84,6 @@ void ecrire_moins_betement(string texte){
 
 int main() {
     //ecrire_betement(lorem);
-    ecrire_moins_betement(lorem);
+    ecrireMoinsBetement(lorem);
     return 0;
 }
