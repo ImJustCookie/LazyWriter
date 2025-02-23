@@ -5,7 +5,12 @@
 #include <bits/stdc++.h>
 #include <functional>
 
+#include <QApplication>
+#include <QDialog>
+#include <QPushButton>
+
 #include "lorem.hpp"
+#include "Window.hpp"
 
 // DELAY BETWEEN 2 CHARS
 #define MIN_TIME_DELAY 100'000 //in micro seconds (1'000'000 equals 1 sec)
@@ -147,13 +152,19 @@ void ecrireMoinsBetement(string texte){
 
 }
 
-
-int main() {
-
-    ecrireMoinsBetement(lorem);
-    return 0;
+int main(int argc, char *argv[]) {
+    QApplication app(argc, argv);
+    MainWindow window;
+    window.resize(400, 200);
+    window.show();
+    return app.exec();
 }
 
+// int main() {
+
+//     ecrireMoinsBetement(lorem);
+//     return 0;
+// }
 
 
 // OLD
