@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     inputField = new QTextEdit(this);
     inputField->setPlaceholderText("Enter or paste your paragraph you want to write here...");
-    inputField->setFixedHeight(150); 
+    inputField->setFixedHeight(400); 
     inputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     button = new QPushButton("Write Text!", this);
@@ -111,8 +111,8 @@ void MainWindow::selectChanged() {
     case 2://fort
 
         *currentProfile = {
-            60'000,
-            150'000,
+            30'000,
+            70'000,
 
             150,
             100'000,
