@@ -7,24 +7,28 @@
 
 #include "writer.hpp"
 
-// DELAY BETWEEN 2 CHARS
-#define MIN_TIME_DELAY 100'000 //in micro seconds (1'000'000 equals 1 sec)
-#define MAX_TIME_DELAY 200'000
-
-//SMALL BREAK PARAMETERS BETWEEN WORDS
-#define CHANCE_CHAR 150 //1 in 150
-#define MIN_TIME_CHAR 100'000
-#define MAX_TIME_CHAR 6'000'000
-
-//SMALL BREAK PARAMETERS BETWEEN WORDS
-#define CHANCE_WORD 30 //1 in 30
-#define MIN_TIME_WORD 100'000
-#define MAX_TIME_WORD 4'000'000
-
-//VALUE FOR CHANCE OF FAILURE WHEN WRITING
-#define CHANCE_TO_FAIL_WRITING 70 //1 in 70
-
 using namespace std;
+
+
+struct writer::Profile {
+    // Delay between two characters (in microseconds)
+    unsigned int minTimeDelay = 100'000; // 1'000'000 equals 1 sec
+    unsigned int maxTimeDelay = 200'000;
+
+    // Small break parameters between characters
+    unsigned int chanceChar = 150;      // 1 in 150
+    unsigned int minTimeChar = 100'000;
+    unsigned int maxTimeChar = 6'000'000;
+
+    // Small break parameters between words
+    unsigned int chanceWord = 30;       // 1 in 30
+    unsigned int minTimeWord = 100'000;
+    unsigned int maxTimeWord = 4'000'000;
+
+    // Chance of failure when writing
+    unsigned int chanceToFailWriting = 70; // 1 in 70
+    unsigned int chanceToSeeError = 3;
+};
 
 
 int writer::randomBetween(int min, int max){
@@ -87,16 +91,16 @@ int writer::writeWithPotentialError(int chance, char c){
 
 
 
-int writer::ecrireMot(string word){
+int writer::ecrireMot(string word, Profile profile){
     bool madeMistake = false;
     int sumOfError =0;
     int nbMoreChar = 404;
-    int rand_speed = randomBetween(MIN_TIME_DELAY, MAX_TIME_DELAY);//temps entre chaque caratere pour chaque mot
+    int rand_speed = randomBetween(profile.minTimeDelay, profile.maxTimeDelay);//temps entre chaque caratere pour chaque mot
 
     for (auto c : word){
-        potentialSmallBreakTime(CHANCE_CHAR, MIN_TIME_CHAR, MAX_TIME_CHAR);//chance et temps de pause intermot
+        potentialSmallBreakTime(profile.chanceChar, profile.minTimeChar, profile.maxTimeChar);//chance et temps de pause intermot
 
-        nbMoreChar = writeWithPotentialError(CHANCE_TO_FAIL_WRITING, c);
+        nbMoreChar = writeWithPotentialError(profile.chanceToFailWriting, c);
         if (nbMoreChar!=404){
             madeMistake = true;
             sumOfError += nbMoreChar;
@@ -114,8 +118,8 @@ int writer::ecrireMot(string word){
     return 404;
 }
 
-void writer::supprimerMot(int word_length){
-    int rand_speed = randomBetween(MIN_TIME_DELAY * 2, MAX_TIME_DELAY);//temps entre chaque mot pour le 
+void writer::supprimerMot(int word_length, Profile profile){
+    int rand_speed = randomBetween(profile.minTimeDelay * 2, profile.maxTimeDelay);//temps entre chaque mot pour le 
     for (int i=0; i< word_length+1 ;i++){
         cout << '\b' << ' ' << '\b';
         cout.flush();
@@ -124,7 +128,7 @@ void writer::supprimerMot(int word_length){
 }
 
 
-void writer::ecrireMoinsBetement(string texte){
+void writer::ecrireMoinsBetement(string texte, Profile profile){
     stringstream wordStream(texte); 
     string word;
     int nbMoreChar;
@@ -132,12 +136,12 @@ void writer::ecrireMoinsBetement(string texte){
     vector<string> listOfWords = splitBySpace(texte);
 
     for (auto word : listOfWords){
-        potentialSmallBreakTime(CHANCE_WORD, MIN_TIME_WORD, MAX_TIME_WORD);//chance et temps de pause extramot
-        nbMoreChar = ecrireMot(word);
+        potentialSmallBreakTime(profile.chanceWord, profile.minTimeWord, profile.maxTimeWord);//chance et temps de pause extramot
+        nbMoreChar = ecrireMot(word, profile);
         if (nbMoreChar != 404){
-            if (randomBetween(0,3)==0){
-                supprimerMot(word.length() + nbMoreChar);
-                ecrireMot(word);
+            if (randomBetween(0,profile.chanceToSeeError)==0){
+                supprimerMot(word.length() + nbMoreChar, profile);
+                ecrireMot(word, profile);
 
             }
         }
@@ -149,11 +153,11 @@ void writer::ecrireMoinsBetement(string texte){
 
 
 // OLD
-void writer::ecrireBetement(string texte){
+void writer::ecrireBetement(string texte, Profile profile){
     for (auto c : texte){
         cout << c;
         cout.flush();
-        usleep(randomBetween(MIN_TIME_DELAY, MAX_TIME_DELAY));
+        usleep(randomBetween(profile.minTimeDelay, profile.maxTimeDelay));
     }
     cout << endl;
 }

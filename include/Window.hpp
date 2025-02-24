@@ -7,6 +7,7 @@
 #include <QWidget>
 #include <QComboBox>
 #include <QTextEdit>
+#include "writer.hpp"
 
 
 class MainWindow : public QMainWindow {
@@ -14,6 +15,7 @@ class MainWindow : public QMainWindow {
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    writer::Profile* currentProfile;
 
 private slots:
     void onButtonClicked();
