@@ -25,5 +25,7 @@ private:
     QTextEdit *inputField;
     QPushButton *button;
     QComboBox *select;
+
+
 };
 
