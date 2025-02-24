@@ -1,6 +1,4 @@
-
-#ifndef MAINWINDOW_HPP
-#define MAINWINDOW_HPP
+#pragma once
 
 #include <QMainWindow>
 #include <QLineEdit>
@@ -8,6 +6,8 @@
 #include <QVBoxLayout>
 #include <QWidget>
 #include <QComboBox>
+#include <QTextEdit>
+
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -20,9 +20,8 @@ private slots:
     void selectChanged();
 
 private:
-    QLineEdit *inputField;
+    QTextEdit *inputField;
     QPushButton *button;
     QComboBox *select;
 };
 
-#endif // MAINWINDOW_HPP

@@ -1,22 +1,28 @@
 #include "Window.hpp"
 #include <QMessageBox>
+#include <QTextEdit>
+
+#include "writer.cpp"
+using namespace writer;
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QWidget *centralWidget = new QWidget(this);
     QVBoxLayout *layout = new QVBoxLayout(centralWidget);
 
-    inputField = new QLineEdit(this);
-    inputField->setPlaceholderText("Enter text here");
+    inputField = new QTextEdit(this);
+    inputField->setPlaceholderText("Enter or paste your paragraph here...");
+    inputField->setFixedHeight(150); 
+    inputField->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     button = new QPushButton("Show Text", this);
     connect(button, &QPushButton::clicked, this, &MainWindow::onButtonClicked);
 
-    QStringList options = { "Q", "W", "E", "R" };
+    QStringList options = { "Neuneu", "Normal", "HyperActif"};
     QComboBox* combo = new QComboBox(this);
     combo->addItems(options);
     connect( combo, &QComboBox::currentTextChanged, this, &MainWindow::selectChanged);
 
-    // layout-> addWidget(combo);
     layout->addWidget(inputField);
     layout->addWidget(button);
 
@@ -26,11 +32,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 void MainWindow::onButtonClicked() {
-    QString text = inputField->text();
-    QMessageBox::information(this, "Input Text", "You entered: " + text);
+    string text = inputField->toPlainText().toStdString();
+    ecrireMoinsBetement(text);
 }
 
 void MainWindow::selectChanged() {
-    QString text = inputField->text();
+    QString text = inputField->toPlainText();
     QMessageBox::information(this, "Input Text", "You entered: " + text);
 }
