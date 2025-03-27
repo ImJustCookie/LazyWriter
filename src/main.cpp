@@ -6,8 +6,6 @@
 #include <functional>
 
 #include <QApplication>
-#include <QDialog>
-#include <QPushButton>
 
 #include "lorem.hpp"
 #include "Window.hpp"
@@ -16,7 +14,7 @@
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     MainWindow window;
-    window.resize(600, 400);
+    // window.resize(600, 400);
     window.show();
     return app.exec();
 }
