@@ -9,15 +9,15 @@ project(lazy_writer LANGUAGES CXX)
 
 # Find the required Qt packages
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
-
+find_package(X11 REQUIRED)
 # Enable automatic MOC (Meta-Object Compiler)
 set(CMAKE_AUTOMOC ON)
 
 # Add your executable
-add_executable(lazy_writer src/main.cpp include/lorem.hpp include/Window.hpp src/Window.cpp)
+add_executable(lazy_writer src/main.cpp include/lorem.hpp include/Window.hpp src/Window.cpp include/KeyboardSimulator.hpp src/KeyboardSimulator.cpp)
 
 # Link Qt libraries to your executable
-target_link_libraries(lazy_writer PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
+target_link_libraries(lazy_writer PRIVATE X11 Qt6::Core Qt6::Gui Qt6::Widgets)
 
 # Include directories
 target_include_directories(lazy_writer PUBLIC include)
