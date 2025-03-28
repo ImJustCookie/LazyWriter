@@ -2,7 +2,6 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from PyQt6.QtCore import QFile, QTextStream
 from window import MainWindow
-import os
 
 def load_stylesheet(file_path):
     """Load a stylesheet from an external CSS file."""
@@ -18,7 +17,7 @@ def load_stylesheet(file_path):
 
 def main():    
     app = QApplication(sys.argv)
-    stylesheet = load_stylesheet("style.css")
+    stylesheet = load_stylesheet("style.css")    
     app.setStyleSheet(stylesheet)
     window = MainWindow()
     window.show()

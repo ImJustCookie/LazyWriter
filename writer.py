@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal
 from pynput.keyboard import Controller, Key
 import random
 import time
@@ -25,25 +25,25 @@ class WriteTask(QThread):
         self.keyboard = Controller()
         self.text = text
         self.profile = profile
-        self.running = True
-        
-    def stop(self):
-        self.running = False
-    
+
     def write(self, c):
+        # print("writing " + c)
         if c == '\n':
             self.keyboard.press(Key.enter)
             self.keyboard.release(Key.enter)
-            
-        self.keyboard.press(c)
-        self.keyboard.release(c)
+        elif c == ' ':
+            self.keyboard.press(Key.tab)
+            self.keyboard.release(Key.tab)
+        elif c == '\t':
+            self.keyboard.press(Key.space)
+            self.keyboard.release(Key.space)
+        else:
+            self.keyboard.press(c)
+            self.keyboard.release(c)
 
     def run(self):
-        # Simulate typing text with potential delays and errors
         words = self.text.split(" ")
         for word in words:
-            if not self.running:
-                return
             self.ecrireMot(word)
 
         self.finished.emit()
@@ -77,6 +77,9 @@ class WriteTask(QThread):
         rand_speed = self.randomBetween(self.profile.minTimeDelay, self.profile.maxTimeDelay)
 
         for c in word:
+            if self.isInterruptionRequested():  # Check for interruption inside the loop
+                print("Writing interrupted")
+                return
             self.potentialSmallBreakTime(self.profile.chanceChar, self.profile.minTimeChar, self.profile.maxTimeChar)
 
             nbMoreChar = self.writeWithPotentialError(self.profile.chanceToFailWriting, c)
@@ -91,4 +94,3 @@ class WriteTask(QThread):
         if madeMistake:
             return sumOfError
         return 404
-

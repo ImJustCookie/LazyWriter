@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         side_title.setObjectName("title")
         side_layout.setSpacing(0)
         side_layout.addWidget(side_title, 0, Qt.AlignmentFlag.AlignTop)
-        side_layout.addWidget(self.select, 0, Qt.AlignmentFlag.AlignAbsolute | Qt.AlignmentFlag.AlignTop)
+        side_layout.addWidget(self.select, 0, Qt.AlignmentFlag.AlignTop)
         side_widget.setFixedWidth(150)
         
         
@@ -52,12 +52,39 @@ class MainWindow(QMainWindow):
         # Create QThreadPool
         self.thread_pool = QThreadPool()
 
+    def createTextInput(self):
+        self.inputField = QTextEdit(self)
+        self.inputField.setObjectName("textField")
+        self.inputField.setPlaceholderText("Enter or paste your paragraph here...")
+        self.inputField.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
+
+    def createStartButton(self):
+        self.startButton = QPushButton("Write Text!", self)
+        self.startButton.setObjectName("startButton")
+        self.startButton.setFixedSize(150, 40)
+        self.startButton.clicked.connect(self.onButtonClicked)
+        
+    def createStopButton(self):
+        self.stopButton = QPushButton("Stop Writing", self)
+        self.stopButton.setObjectName("stopButton")
+        self.stopButton.setFixedSize(150, 40)
+        self.stopButton.clicked.connect(self.onStopButtonClicked)
+
+    def createSelectMenu(self):
+        options = ["Neuneu", "Normal", "HyperActif"]
+        self.select = QComboBox(self)
+        self.select.setObjectName("selectMenu")
+        self.select.addItems(options)
+        self.select.setFixedSize(130, 30)
+        self.select.setCurrentIndex(1)
+        self.select.currentTextChanged.connect(self.onSelectChange)
+
+
     def onStopButtonClicked(self):
         if self.currentTask and self.currentTask.isRunning():
-            self.currentTask.stop()
-            self.currentTask.wait()
+            self.currentTask.requestInterruption()  # Request interruption
+            self.currentTask.wait()  # Wait for the thread to finish
             self.currentTask = None  # Clear reference
-
 
     def onButtonClicked(self):
         text = self.inputField.toPlainText()
@@ -91,29 +118,3 @@ class MainWindow(QMainWindow):
             self.currentProfile = Profile(
                 30000, 70000, 150, 100000, 3000000, 30, 100000, 2000000, 150, 2)
 
-    def createTextInput(self):
-        self.inputField = QTextEdit(self)
-        self.inputField.setObjectName("textField")
-        self.inputField.setPlaceholderText("Enter or paste your paragraph here...")
-        self.inputField.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-
-    def createStartButton(self):
-        self.startButton = QPushButton("Write Text!", self)
-        self.startButton.setObjectName("startButton")
-        self.startButton.setFixedSize(150, 40)
-        self.startButton.clicked.connect(self.onButtonClicked)
-        
-    def createStopButton(self):
-        self.stopButton = QPushButton("Stop Writing", self)
-        self.stopButton.setObjectName("stopButton")
-        self.stopButton.setFixedSize(150, 40)
-        self.stopButton.clicked.connect(self.onStopButtonClicked)
-
-    def createSelectMenu(self):
-        options = ["Neuneu", "Normal", "HyperActif"]
-        self.select = QComboBox(self)
-        self.select.setObjectName("selectMenu")
-        self.select.addItems(options)
-        self.select.setFixedSize(130, 30)
-        self.select.setCurrentIndex(1)
-        self.select.currentTextChanged.connect(self.onSelectChange)
