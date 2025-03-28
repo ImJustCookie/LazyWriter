@@ -11,4 +11,3 @@ std::string lorem = "\nNo one rejects, dislikes, or avoids pleasure itself, beca
 "\nBut who has any right to find fault with a man who "
 "\nchooses to enjoy a pleasure that has no annoying consequences,"
 "\nor one who avoids a pain that produces no resultant pleasure?";
-

@@ -7,6 +7,6 @@
 
 namespace KeyboardSimulator
 {
-    void simulateKeyPress(Display* display, Window window, char key);
+    void simulateKeyPress(std::string key);
 
 } // namespace KeyboardSimulator
