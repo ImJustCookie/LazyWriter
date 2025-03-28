@@ -91,3 +91,4 @@ class WriteTask(QThread):
         if madeMistake:
             return sumOfError
         return 404
+
