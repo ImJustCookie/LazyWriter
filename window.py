@@ -11,8 +11,9 @@ class MainWindow(QMainWindow):
         self.currentProfile = Profile(
             100000, 200000, 150, 100000, 6000000, 30, 100000, 4000000, 70, 3)
 
-        self.setMinimumSize(400, 520)
-
+        self.setMinimumSize(520, 520)
+        self.currentTask = None
+        
         centralWidget = QWidget(self)
         layout = QVBoxLayout(centralWidget)
         subLayout = QHBoxLayout()
@@ -33,7 +34,9 @@ class MainWindow(QMainWindow):
 
         # Button setup
         self.button = QPushButton("Write Text!", self)
+        self.stopButton = QPushButton("Stop Writing", self)
         self.button.setFixedSize(150, 40)
+        self.stopButton.setFixedSize(150, 40)
         self.button.setStyleSheet(
             "QPushButton {"
             "  background-color: #4CAF50;"
@@ -46,6 +49,19 @@ class MainWindow(QMainWindow):
             "  background-color: #45a049;"
             "}"
         )
+        self.stopButton.setStyleSheet(
+            "QPushButton {"
+            "  background-color: red;"
+            "  color: white;"
+            "  border: none;"
+            "  border-radius: 5px;"
+            "  font-size: 16px;"
+            "}"
+            "QPushButton:hover {"
+            "  background-color: rgb(170, 14, 14);"
+            "}"
+        )
+        self.stopButton.clicked.connect(self.onStopButtonClicked)
         self.button.clicked.connect(self.onButtonClicked)
 
         # Mode selection combobox setup
@@ -70,6 +86,7 @@ class MainWindow(QMainWindow):
 
         # Layout management
         subLayout.addWidget(self.select, 0, Qt.AlignLeft)
+        subLayout.addWidget(self.stopButton, 0, Qt.AlignCenter)
         subLayout.addWidget(self.button, 0, Qt.AlignRight)
         
         subLayout.setSpacing(20)
@@ -85,19 +102,32 @@ class MainWindow(QMainWindow):
         # Create QThreadPool
         self.thread_pool = QThreadPool()
 
+    def onStopButtonClicked(self):
+        if self.currentTask and self.currentTask.isRunning():
+            self.currentTask.stop()
+            self.currentTask.wait()
+            self.currentTask = None  # Clear reference
+
+
     def onButtonClicked(self):
         text = self.inputField.toPlainText()
         print(self.select.currentText())
         self.button.setDisabled(True)
         sleep(3)
 
-        # Create and submit the task to the thread pool
-        task = WriteTask(text, self.currentProfile, self.onWritingFinished)
-        self.thread_pool.start(task)
+        if self.currentTask and self.currentTask.isRunning():
+            self.currentTask.stop()
+            self.currentTask.wait()
+
+        self.currentTask = WriteTask(text, self.currentProfile)
+        self.currentTask.finished.connect(self.onWritingFinished)
+        self.currentTask.start()  # Start the thread
+        
 
     def onWritingFinished(self):
         print("Writing finished!")
         self.button.setDisabled(False)
+        self.currentTask = None 
 
     def selectChanged(self):
         optionSelected = self.select.currentIndex()
@@ -111,6 +141,5 @@ class MainWindow(QMainWindow):
             self.currentProfile = Profile(
                 30000, 70000, 150, 100000, 3000000, 30, 100000, 2000000, 150, 2)
 
-    def closeEvent(self, event):
-        self.thread_pool.clear()
-        event.accept()
+
+    

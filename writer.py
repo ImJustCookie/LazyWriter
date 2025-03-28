@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QRunnable
+from PyQt5.QtCore import QThread, pyqtSignal
 from pynput.keyboard import Controller, Key
 import random
 import time
@@ -17,14 +17,19 @@ class Profile:
         self.chanceToFailWriting = chanceToFailWriting
         self.chanceToSeeError = chanceToSeeError
 
-class WriteTask(QRunnable):
-    def __init__(self, text, profile, callback):
+class WriteTask(QThread):
+    finished = pyqtSignal()
+    
+    def __init__(self, text, profile):
         super().__init__()
         self.keyboard = Controller()
         self.text = text
         self.profile = profile
-        self.callback = callback
-
+        self.running = True
+        
+    def stop(self):
+        self.running = False
+    
     def write(self, c):
         if c == '\n':
             self.keyboard.press(Key.enter)
@@ -37,10 +42,11 @@ class WriteTask(QRunnable):
         # Simulate typing text with potential delays and errors
         words = self.text.split(" ")
         for word in words:
+            if not self.running:
+                return
             self.ecrireMot(word)
 
-        if self.callback:
-            self.callback()
+        self.finished.emit()
 
     def randomBetween(self, min_val, max_val):
         return random.randint(min_val, max_val)
