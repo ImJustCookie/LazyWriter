@@ -1,0 +1,12 @@
+LICENSE
+MANIFEST.in
+README.md
+pyproject.toml
+setup.py
+lazywriter.egg-info/PKG-INFO
+lazywriter.egg-info/SOURCES.txt
+lazywriter.egg-info/dependency_links.txt
+lazywriter.egg-info/entry_points.txt
+lazywriter.egg-info/requires.txt
+lazywriter.egg-info/top_level.txt
+src/static/style.css

@@ -1,0 +1,2 @@
+[console_scripts]
+lazywriter = lazy_writer_raphael_senellart.main:main
