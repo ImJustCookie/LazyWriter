@@ -1,0 +1,63 @@
+QTextEdit {
+    background-color: #f7f7f7;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
+}
+
+#startButton {
+    background-color: #4CAF50;
+    
+}
+
+#startButton:hover {
+    background-color: #45a049;
+}
+#startButton:disabled {
+    background-color: gold;
+}
+
+#stopButton {
+    background-color: red;
+
+}
+
+#stopButton:hover {
+    background-color: rgb(170, 14, 14);
+}
+#title{
+    font-size: 18px;
+    font-weight: bold;
+    padding-bottom: 10px;
+    color: #b9b9b9;
+}
+
+QPushButton {
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+QComboBox {
+    background-color: #f7f7f7;
+    color: black;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+QComboBox::item {
+    background-color: white;
+}
+
+QComboBox::item:selected {
+    background-color: #4CAF50;  /* Change this color as needed */
+    color: white;                /* Change text color when selected */
+}
+
+QComboBox:hover {
+    border-color: #4CAF50;
+}
